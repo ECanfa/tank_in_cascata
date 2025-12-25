@@ -52,3 +52,71 @@ hold on; grid on; zoom on;
 [M_a, M_f, omega_pi, omega_c] = margin(G);
 fprintf('La pulsazione critica di G è %.1f rad/s.\n',omega_c);
 fprintf('Il margine di fase di G è %.1f gradi.\n',M_f);
+
+%Definizioni dei limiti del grafico
+omega_plot_min = 1e-5;
+omega_plot_max = 1e7;
+
+%Parte da controllare guadagno statico mu
+W_star = 3.5;
+D_star = 2.5;
+e_star = 0.01;
+
+
+
+
+R=1; %R temporaneo di prova
+L=R*G;
+
+%Attenuazione disturbo in uscita
+%Specifiche di attenuazione del disturbo in uscita e rumore di misura
+omega_d_min = 1e-5; %approssimazione verso 0
+omega_d_max = 4.0;
+A_d = 40;
+
+omega_n_min = 1e5;
+omega_n_max = 5e6;
+A_n = 63;
+
+%Creazione patch
+figure;
+hold on;
+
+%Patch per il disturbo in uscita
+patch_x_d = [omega_d_min; omega_d_max; omega_d_max; omega_d_min];
+patch_y_d = [A_d; A_d; -350; -350];
+patch(patch_x_d, patch_y_d,'r','FaceAlpha',0.2,'EdgeAlpha',0);
+
+%Patch per rumore di misurazione
+patch_x_n = [omega_n_min; omega_n_max; omega_n_max; omega_n_min];
+patch_y_n = [-A_n; -A_n; 150; 150];
+patch(patch_x_n, patch_y_n,'r','FaceAlpha',0.2,'EdgeAlpha',0);
+
+%Specifiche dinamiche
+
+S_star = 30;
+T_a_5_star = 0.050;
+xi_star  = abs(log(S_star/100))/(sqrt(pi^2 + log(S_star/100)^2));
+M_f_min = 100*xi_star;
+
+omega_c_min = 300/(M_f_min*T_a_5_star);
+
+%Specifica tempo di assestamento
+
+patch_Ta_x = [omega_plot_min; omega_c_min; omega_c_min; omega_plot_min];
+patch_Ta_y = [0; 0; -350; -350];
+patch(patch_Ta_x, patch_Ta_y,'b','FaceAlpha',0.2,'EdgeAlpha',0);
+
+%Diagramma di Bode della L(s) temporanea
+margin(L,{omega_plot_min,omega_plot_max});
+
+%Specifica sovraelongazione(Margine di fase)
+
+omega_c_max = omega_n_min;
+
+patch_Mf_x = [omega_c_min; omega_c_max; omega_c_max; omega_c_min];
+patch_Mf_y = [M_f_min - 180; M_f_min - 180; -270; -270];
+patch(patch_Mf_x, patch_Mf_y,'g','FaceAlpha',0.2,'EdgeAlpha',0);
+
+
+grid on; zoom on;
