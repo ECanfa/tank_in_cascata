@@ -1,4 +1,4 @@
-close all; clear all; clc;
+close all; clear; clc;
 %Definizioni costanti e punti di equilibrio
 
 k1=1;
@@ -57,17 +57,6 @@ fprintf('Il margine di fase di G è %.1f gradi.\n',M_f);
 omega_plot_min = 1e-5;
 omega_plot_max = 1e7;
 
-%Parte da controllare guadagno statico mu
-W_star = 3.5;
-D_star = 2.5;
-e_star = 0.01;
-
-
-
-
-R=1; %R temporaneo di prova
-L=R*G;
-
 %Attenuazione disturbo in uscita
 %Specifiche di attenuazione del disturbo in uscita e rumore di misura
 omega_d_min = 1e-5; %approssimazione verso 0
@@ -107,16 +96,64 @@ patch_Ta_x = [omega_plot_min; omega_c_min; omega_c_min; omega_plot_min];
 patch_Ta_y = [0; 0; -350; -350];
 patch(patch_Ta_x, patch_Ta_y,'b','FaceAlpha',0.2,'EdgeAlpha',0);
 
+
+
+omega_c_max = omega_n_min;
+
+% ====================
+ % SINTESI CONTROLLORE PROVA
+% ====================
+% (luci) NOTA metto qui per il momento
+
+%Parte da controllare guadagno statico mu
+W_star = 3.5;
+D_star = 2.5;
+e_star = 0.01;
+
+% per Teorema Valore Finale
+%a
+mu_min = (W_star+D_star)/e_star - 1;
+mu_min_dist = 0; %mu_min_dist = 10^(A_d/20);
+
+mu_omega_c_max = 1/abs(evalfr(G,omega_c_max));
+
+% Criterio Fisica Realizzabilita da guardare
+kG = -40;
+patch_fis_x = [omega_n_min;omega_plot_max;omega_plot_max;omega_n_min];
+y_ = 20*log10(abs(evalfr(G,omega_n_min)));
+y__ = 20*log10(abs(evalfr(G,omega_plot_max)));
+
+patch_fis_y = [0;0;y__-y_;0];
+patch(patch_fis_x,patch_fis_y,'r','FaceAlpha',0.2,'EdgeAlpha',0);
+
+G_0 = abs(evalfr(G, 0));
+
+% Trovati mu minimi desiderati per la L(s), troviamo mu di R come L(0)/G(0)
+mu_R = max(mu_min/G_0, mu_omega_c_max/G_0);
+R_s = mu_R;
+G_esteso = R_s*G;
+
+s=tf('s');
+
+R=1; %R temporaneo di prova
+L=R*G_esteso;
+fprintf('mu di L(s)%.1f.\n',abs(evalfr(L, 0)));
+[M_a, M_f, omega_pi, omega_c] = margin(L);
+fprintf('La pulsazione critica di L è %.1f rad/s.\n',omega_c);
+fprintf('Il margine di fase di L è %.1f gradi.\n',M_f);
+
 %Diagramma di Bode della L(s) temporanea
 margin(L,{omega_plot_min,omega_plot_max});
 
 %Specifica sovraelongazione(Margine di fase)
-
-omega_c_max = omega_n_min;
-
 patch_Mf_x = [omega_c_min; omega_c_max; omega_c_max; omega_c_min];
 patch_Mf_y = [M_f_min - 180; M_f_min - 180; -270; -270];
 patch(patch_Mf_x, patch_Mf_y,'g','FaceAlpha',0.2,'EdgeAlpha',0);
 
-
 grid on; zoom on;
+
+% Spefiche di robustezza
+M_f_robusto = 30;
+if M_f < M_f_robusto
+    fprintf('[ERRORE]: Il margine di fase non rispetta le caratteristiche')
+end
