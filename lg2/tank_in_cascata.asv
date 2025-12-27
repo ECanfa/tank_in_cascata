@@ -2,9 +2,10 @@ close all; clear; clc;
 %Definizioni costanti e punti di equilibrio
 
 k1=1;
-k2=0.30;
+k2=0.30;7
 k3=0.45;
 k4=0.50;
+
 xe=[9.45, 4.20];
 ue=(k1/k4)*sqrt(xe(1));
 
