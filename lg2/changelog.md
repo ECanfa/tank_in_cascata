@@ -15,10 +15,22 @@ visto che M\_star non dovrebbe importare troppo visto che wc rientra nell'interv
 
 Ho caricato un jpg del diagramma di bode. dovrebbe soddisfare i requisiti
 
-### Test Anello Chiuso punto 4 
+## Test Anello Chiuso punto 4 
 Ho provato ad usare il regolatore per il punto 4:
 
 (x) La risposta al gradino w(s) presenta una S% > S\_star% 
-
 (x) La Y(s) con D(s)S(s) e anche con (N(s)F(s)) ha nelle frequenze delle sinusoidi una |Y(s)|dB >>0, problema? 
- potrebbe NON esserlo visto che parla di attenuazione quindi chiede solo che |L(s)|dB = |Y(s)|dB/|N(s)|dB <= An
+
+
+# 12/29
+
+## punto 3
+    Lasciato cosi come e
+## punto 4
+ (x) La risposta al gradino w(s) potrebbe sistemarsi da solo con un w\_c maggiore di w\_c min, non ho ancora provato
+    non vedo perche dovrebbe funzionare se le specifiche sono rispettate, ma comunque
+
+## punto 5: Simulink
+file simulazione\_sistema\_non\_lineare{.m,.slx}. nel primo semplicemente trovato le soluzione dell'equazione differenziale 
+e plottato il grafico di x e y. per il momento nello dando (xe, ue) al sistema.
+Potrebbe essere sufficiente mettere in retroazione la R(s) per poi magari antitrasformare l'output?

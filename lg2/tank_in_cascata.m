@@ -124,11 +124,14 @@ y__ = 20*log10(abs(evalfr(G,omega_plot_max)));
 patch_fis_y = [0;0;y__-y_;0];
 patch(patch_fis_x,patch_fis_y,'r','FaceAlpha',0.2,'EdgeAlpha',0);
 
-G_0 = abs(evalfr(G, 0));
+
+% ====== Sintesi Regolatore Statico ======
+% 
 
 % Trovati mu minimi desiderati per la L(s), troviamo mu di R come L(0)/G(0)
 % (luci)
 % wc non appartiene al range, altra mu
+G_0 = abs(evalfr(G, 0));
 omega_c_star = omega_c_min;%+ (omega_c_max - omega_c_min)/4;
 mu_omega_c_star = 1/abs(evalfr(G,omega_c_star));
 mu_R = max(mu_min/G_0, mu_omega_c_star/G_0);
@@ -146,7 +149,7 @@ cos_phi_star = cos(phi_star);
 sin_phi_star = sin(phi_star);
 M_star = 1/(cos(phi_star))+0.1;
 
-% controllo parametri scelti
+% controllo parametri scelti, formule di inversione
 if (M_star < 0) ...
     || (0 > phi_star || pi/2 < phi_star) ...
     || (cos_phi_star < 1/M_star)
@@ -161,7 +164,7 @@ fprintf('aT: %.6f\n', T_polo_Rd);
 R_d = 1*(1+T_zero_Rd*s)/(1+T_polo_Rd*s);
 
 
-L=R_d*G_esteso;
+L=G_esteso;%R_d*G_esteso;
 fprintf('mu di L(s)%.1f.\n',abs(evalfr(L, 0)));
 [M_a, M_f, omega_pi, omega_c] = margin(L);
 fprintf('La pulsazione critica di L è %.1f rad/s.\n',omega_c);
@@ -178,7 +181,7 @@ patch(patch_Mf_x, patch_Mf_y,'g','FaceAlpha',0.2,'EdgeAlpha',0);
 grid on; zoom on;
 
 % Spefiche di robustezza
-M_f_robusto = 30;
+M_f_robusto = max(30, M_f_min);
 if M_f < M_f_robusto
     fprintf('[ERRORE]: Il margine di fase non rispetta le caratteristiche\n')
 end
