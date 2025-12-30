@@ -178,7 +178,7 @@ R_d = 1*(1+T_zero_Rd*s)/(1+T_polo_Rd*s);
 
 RR = R_s*R_d;
 
-U = [0, 1];
+U = [0, ]
 
 L=RR*G;
 fprintf('mu di L(s)%.1f.\n',abs(evalfr(L, 0)));

@@ -39,7 +39,7 @@ S_star = 30;
 T_a_5_star = 0.050;
 xi_star  = abs(log(S_star/100))/(sqrt(pi^2 + log(S_star/100)^2));
 M_f_min = 100*xi_star;
-
+    
 omega_c_min = 300/(M_f_min*T_a_5_star);
 
 omega_c_star = omega_c_min;%+ (omega_c_max - omega_c_min)/4;
@@ -50,7 +50,7 @@ RR_s = mu_R;
 phi_star = pi/4;
 cos_phi_star = cos(phi_star);
 sin_phi_star = sin(phi_star);
-M_star = 1/(cos(phi_star))+0.1;
+M_star = 1/(cos(phi_star))+0.01;
 
 T_zero_Rd = (M_star - cos_phi_star)/(omega_c_star*sin_phi_star);
 T_polo_Rd = (cos(phi_star) - 1/M_star)/(omega_c_star*sin_phi_star);
@@ -58,7 +58,9 @@ T_polo_Rd = (cos(phi_star) - 1/M_star)/(omega_c_star*sin_phi_star);
 s = tf('s');
 RR_d = 1*(1+T_zero_Rd*s)/(1+T_polo_Rd*s);
 
-L = RR_s*RR_d*G;
+RR = RR_s*RR_d;
+
+L = RR*G;
 F = L/(1+L);
 
 % Risposta a w(t) riferimento
