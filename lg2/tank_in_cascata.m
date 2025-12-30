@@ -164,7 +164,7 @@ fprintf('aT: %.6f\n', T_polo_Rd);
 R_d = 1*(1+T_zero_Rd*s)/(1+T_polo_Rd*s);
 
 
-L=G_esteso;%R_d*G_esteso;
+L=R_d*G_esteso;
 fprintf('mu di L(s)%.1f.\n',abs(evalfr(L, 0)));
 [M_a, M_f, omega_pi, omega_c] = margin(L);
 fprintf('La pulsazione critica di L è %.1f rad/s.\n',omega_c);

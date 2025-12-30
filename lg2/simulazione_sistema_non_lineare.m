@@ -31,3 +31,8 @@ y = x(:, 2);
 plot(tt, y); % per il momento supponiamo prenda l'intero stato
 legend('output');
 ylabel('altezza');
+
+% DA FARE
+% aggiungere questi prima di run simulazione
+myParam = Simulink.Parameter;
+myParam.Value = 1;
