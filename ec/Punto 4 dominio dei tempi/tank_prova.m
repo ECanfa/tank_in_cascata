@@ -122,10 +122,21 @@ D_star = 2.5;
 e_star = 0.01;
 
 % per Teorema Valore Finale
-%a
-mu_min = (W_star+D_star)/e_star - 1;
-mu_min_dist = 0; %mu_min_dist = 10^(A_d/20);
+%
+% ====== Sintesi Regolatore Statico ======
+% 
+mu_err = (W_star+D_star)/e_star - 1;
+mu_min_dist = 10^(A_d/20); %mu_min_dist = 10^(A_d/20);
 
+G_0 = abs(evalfr(G, 0));
+
+
+omega_c_star = omega_c_min;%+ (omega_c_max - omega_c_min)/4;
+mu_omega_c_star = 1/abs(evalfr(G,omega_c_star));
+mu_R = max(mu_err/G_0, mu_omega_c_star/G_0);
+
+R_s = mu_R;
+G_esteso = R_s*G;
 
 % Criterio Fisica Realizzabilita da guardare
 kG = -40;
@@ -135,23 +146,6 @@ y__ = 20*log10(abs(evalfr(G,omega_plot_max)));
 
 patch_fis_y = [0;0;y__-y_;0];
 patch(patch_fis_x,patch_fis_y,'r','FaceAlpha',0.2,'EdgeAlpha',0);
-
-
-% ====== Sintesi Regolatore Statico ======
-% 
-
-% Trovati mu minimi desiderati per la L(s), troviamo mu di R come L(0)/G(0)
-% (luci)
-% wc non appartiene al range, altra mu
-G_0 = abs(evalfr(G, 0));
-omega_c_star = omega_c_min;%+ (omega_c_max - omega_c_min)/4;
-mu_omega_c_star = 1/abs(evalfr(G,omega_c_star));
-mu_R = max(mu_min/G_0, mu_omega_c_star/G_0);
-
-
-R_s = mu_R;
-G_esteso = R_s*G;
-
 
 % ====== Sintesi Regolatore Dinamico ======
 % Caso B
@@ -178,7 +172,7 @@ R_d = 1*(1+T_zero_Rd*s)/(1+T_polo_Rd*s);
 
 RR = R_s*R_d;
 
-U = [0, ]
+U = [0, 1];
 
 L=RR*G;
 fprintf('mu di L(s)%.1f.\n',abs(evalfr(L, 0)));
@@ -187,6 +181,8 @@ fprintf('La pulsazione critica di L è %.1f rad/s.\n',omega_c);
 fprintf('Il margine di fase di L è %.1f gradi.\n',M_f);
 
 %Diagramma di Bode della L(s) temporanea
+margin(G_esteso,{omega_plot_min,omega_plot_max});
+hold on;
 margin(L,{omega_plot_min,omega_plot_max});
 
 %Specifica sovraelongazione(Margine di fase)
