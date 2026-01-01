@@ -1,3 +1,10 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Test del sistema linearizzato nel dominio del tempo
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+close all; clear; clc;
+
 k1=1;
 k2=0.30;
 k3=0.45;
@@ -5,6 +12,9 @@ k4=0.50;
 
 xe=[9.45, 4.20];
 ue=(k1/k4)*sqrt(xe(1));
+
+%Condizione iniziale temporanea (per provare con simulink)
+x0 = [xe(1), xe(2)];
 
 %Matrici del sistema linearizzato
 
@@ -27,14 +37,16 @@ T_a_5_star = 0.050;
 xi_star  = abs(log(S_star/100))/(sqrt(pi^2 + log(S_star/100)^2));
 M_f_min = 100*xi_star;
     
-omega_c_min = 300/(M_f_min*T_a_5_star);
+omega_c_min = -log(0.05)*100/(M_f_min*T_a_5_star);
 
 omega_c_star = omega_c_min;%+ (omega_c_max - omega_c_min)/4;
 mu_omega_c_star = 1/abs(evalfr(G,omega_c_star));
 mu_R = max(0, mu_omega_c_star/abs(evalfr(G, 0)));
 RR_s = mu_R;
 
-phi_star = pi/4;
+fprintf('guadagno omega c %f', mu_R);
+
+phi_star = pi/3;
 cos_phi_star = cos(phi_star);
 sin_phi_star = sin(phi_star);
 M_star = 1/(cos(phi_star))+0.01;
@@ -65,8 +77,8 @@ LV = evalfr(W*F,0);
 patch([0,T_simulation,T_simulation,0],[LV*(1+S_star/100),LV*(1+S_star/100),LV*2,LV*2],'r','FaceAlpha',0.3,'EdgeAlpha',0.5);
 
 % vincolo tempo di assestamento al 5%
-patch([T_star,T_simulation,T_simulation,T_star],[LV*(1-0.05),LV*(1-0.05),0,0],'g','FaceAlpha',0.1,'EdgeAlpha',0.5);
-patch([T_star,T_simulation,T_simulation,T_star],[LV*(1+0.05),LV*(1+0.05),LV*2,LV*2],'g','FaceAlpha',0.1,'EdgeAlpha',0.1);
+patch([T_a_5_star,T_simulation,T_simulation,T_a_5_star],[LV*(1-0.05),LV*(1-0.05),0,0],'g','FaceAlpha',0.1,'EdgeAlpha',0.5);
+patch([T_a_5_star,T_simulation,T_simulation,T_a_5_star],[LV*(1+0.05),LV*(1+0.05),LV*2,LV*2],'g','FaceAlpha',0.1,'EdgeAlpha',0.1);
 
 ylim([0,LV*2]);
 

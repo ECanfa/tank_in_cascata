@@ -8,6 +8,7 @@ k4=0.50;
 xe=[9.45, 4.20];
 ue=(k1/k4)*sqrt(xe(1));
 
+
 %Matrici del sistema linearizzato
 
 A=[-k1/(2*sqrt(xe(1))), 0; k2/(2*sqrt(xe(1))), -k3/(2*sqrt(xe(2)))];
@@ -43,7 +44,7 @@ hold on; grid on; zoom on;
 
 figure;
 bode(G);
-title('Diagramma di bode della funzione di trasferimento in anello aperto');
+title('Diagramma di bode della funzione di trasferimento');
 hold on; grid on; zoom on;
 
 %Calcolo margine di ampiezza, fase , pulsazione critica e omega pi
@@ -99,7 +100,7 @@ T_a_5_star = 0.050;
 xi_star  = abs(log(S_star/100))/(sqrt(pi^2 + log(S_star/100)^2));
 M_f_min = 100*xi_star;
 
-omega_c_min = 300/(M_f_min*T_a_5_star);
+omega_c_min = 300/(M_f_min*T_a_5_star);%-log(0.05)/T_a_5_star
 
 %Specifica tempo di assestamento
 
@@ -122,13 +123,24 @@ D_star = 2.5;
 e_star = 0.01;
 
 % per Teorema Valore Finale
-%a
-mu_min = (W_star+D_star)/e_star - 1;
-mu_min_dist = 0; %mu_min_dist = 10^(A_d/20);
+%
+% ====== Sintesi Regolatore Statico ======
+% 
+mu_err = (W_star+D_star)/e_star - 1;
+mu_min_dist = 10^(A_d/20); %mu_min_dist = 10^(A_d/20);
 
+G_0 = abs(evalfr(G, 0));
+
+
+omega_c_star = omega_c_min;%+ (omega_c_max - omega_c_min)/4;
+mu_omega_c_star = 1/abs(evalfr(G,omega_c_star));
+mu_R = max(mu_err/G_0, mu_omega_c_star/G_0);
+
+R_s = mu_R;
+G_esteso = R_s*G;
 
 % Criterio Fisica Realizzabilita da guardare
-kG = -40;
+kG = -40; %grado relativo di G(s) 2, dunque -40dB/decade
 patch_fis_x = [omega_n_min;omega_plot_max;omega_plot_max;omega_n_min];
 y_ = 20*log10(abs(evalfr(G,omega_n_min)));
 y__ = 20*log10(abs(evalfr(G,omega_plot_max)));
@@ -136,28 +148,13 @@ y__ = 20*log10(abs(evalfr(G,omega_plot_max)));
 patch_fis_y = [0;0;y__-y_;0];
 patch(patch_fis_x,patch_fis_y,'r','FaceAlpha',0.2,'EdgeAlpha',0);
 
-
-% ====== Sintesi Regolatore Statico ======
-% 
-
-% Trovati mu minimi desiderati per la L(s), troviamo mu di R come L(0)/G(0)
-% (luci)
-% wc non appartiene al range, altra mu
-G_0 = abs(evalfr(G, 0));
-omega_c_star = omega_c_min;%+ (omega_c_max - omega_c_min)/4;
-mu_omega_c_star = 1/abs(evalfr(G,omega_c_star));
-mu_R = max(mu_min/G_0, mu_omega_c_star/G_0);
-
-
-R_s = mu_R;
-G_esteso = R_s*G;
-
-
-% ====== Sintesi Regolatore Dinamico ======
+% =========================== 
+% Sintesi Regolatore Dinamico
+% ===========================
 % Caso B
 %Formule di inversione
 
-phi_star = pi/4;
+phi_star = pi/3;
 cos_phi_star = cos(phi_star);
 sin_phi_star = sin(phi_star);
 M_star = 1/(cos(phi_star))+0.1;
@@ -187,6 +184,8 @@ fprintf('La pulsazione critica di L è %.1f rad/s.\n',omega_c);
 fprintf('Il margine di fase di L è %.1f gradi.\n',M_f);
 
 %Diagramma di Bode della L(s) temporanea
+margin(G_esteso,{omega_plot_min,omega_plot_max});
+hold on;
 margin(L,{omega_plot_min,omega_plot_max});
 
 %Specifica sovraelongazione(Margine di fase)

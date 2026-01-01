@@ -1,6 +1,7 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%        Test del sistema linearizzato
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%        Test del sistema linearizzato nel dominio della variabile
+%        complessa s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % (luci)
 % sia per d(t) che n(t) plotta la risposta del sistema
@@ -47,7 +48,7 @@ mu_omega_c_star = 1/abs(evalfr(G,omega_c_star));
 mu_R = max(0, mu_omega_c_star/abs(evalfr(G, 0)));
 RR_s = mu_R;
 
-phi_star = pi/4;
+phi_star = pi/3;
 cos_phi_star = cos(phi_star);
 sin_phi_star = sin(phi_star);
 M_star = 1/(cos(phi_star))+0.01;
@@ -81,7 +82,7 @@ patch(Ta_x_patch, Ta_y_patch, 'r','FaceAlpha',0.2,'EdgeAlpha',0);
 % Vincolo di Sovraelungazione
 
 S_x_patch = Ta_x_patch;
-S_y_patch = [W*(1.3), W*(1.3), 4, 4];
+S_y_patch = [W*(1.3), W*(1.3), 5, 5];
 
 patch(S_x_patch, S_y_patch, 'b','FaceAlpha',0.2,'EdgeAlpha',0);
 
