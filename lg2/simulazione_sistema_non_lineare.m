@@ -84,30 +84,44 @@ D = 0;
 N = 0;
 W = 1;
 
-start_simulink();
+% TODO
+% Valori randomizzati intorno al punto di equilibrio
+% 
+x0 = [xe(1), xe(2)];
+e = 2;
+a = 2*pi*(rand(10));
+r = e * sqrt(rand());
+X1 = arrayfun(@(x) cos(x), a); 
+X2 = arrayfun(@(x) sin(x), a);
 
-open_system("lg2/simulazione_sistema_non_lineare");
+% load and run with different values
+load_system("lg2/simulazione_sistema_non_lineare");
 mdl = "simulazione_sistema_non_lineare";
 
-simIn = Simulink.SimulationInput(mdl);
-simIn = setModelParameter(simIn,"Solver","ode45",...
+simIn(1:10) = Simulink.SimulationInput(mdl);
+for i = 1:10
+    simIn = setModelParameter(simIn,"Solver","ode45",...
     "StopTime","20");
+    blk = strcat(mdl,"/Constant1");
+    x0 = [X1(1,i), X2(1,i)];
+    simIn = setBlockParameter(simIn,blk,"Value","x0");
+end
 
-% TODO
-% Randomize Values for inputs
+out = parsim(simIn, TransferBaseWorkspaceVariables="on");
 
 
 % TODO
 % Set Blocks 
-blk = strcat(mdl,"/Constant2");
-simIn = setBlockParameter(simIn,blk,"Value","6.1482");
+
 
 % TODO
 % simulate systems, parsim() needed
-out = sim(simIn);
 
 % TODO
 % Fix the graph that comes out
 %figure; 
-plot(out.yout, 'r');
+figure; hold on;
+for i = 1:10
+plot(out(i).yout, 'r');
+end
 bdclose();
