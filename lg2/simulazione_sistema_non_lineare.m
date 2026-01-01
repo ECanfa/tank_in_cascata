@@ -83,3 +83,31 @@ RR=RR_s*RR_d;
 D = 0;
 N = 0;
 W = 1;
+
+start_simulink();
+
+open_system("lg2/simulazione_sistema_non_lineare");
+mdl = "simulazione_sistema_non_lineare";
+
+simIn = Simulink.SimulationInput(mdl);
+simIn = setModelParameter(simIn,"Solver","ode45",...
+    "StopTime","20");
+
+% TODO
+% Randomize Values for inputs
+
+
+% TODO
+% Set Blocks 
+blk = strcat(mdl,"/Constant2");
+simIn = setBlockParameter(simIn,blk,"Value","6.1482");
+
+% TODO
+% simulate systems, parsim() needed
+out = sim(simIn);
+
+% TODO
+% Fix the graph that comes out
+%figure; 
+plot(out.yout, 'r');
+bdclose();
