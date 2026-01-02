@@ -1,5 +1,7 @@
+close all; clear; clc;
+
 path_to_constants="tank_in_cascata_costanti.m";
-run(path_to_constants);
+run("tank_in_cascata_costanti.m");
 
 % Punto 2
 
@@ -28,11 +30,10 @@ title('Diagramma di bode della funzione di trasferimento');
 
 figure; hold on; grid on; zoom on;
 %Patch tempo di assestamento
-p = 1/s;
-patch_x_e = [omega_plot_min; omega_d_max; omega_d_max; omega_plot_min];
-val_p = 20*log(abs(evalfr(p, omega_d_max)));
-patch_y_e = [20*log(abs(evalfr(p, omega_plot_min))); val_p; val_p ; val_p];
-patch(patch_x_e, patch_y_e,'r','FaceAlpha',0.2,'EdgeAlpha',0);
+patch_Ta_x = [omega_plot_min; omega_c_min; omega_c_min; omega_plot_min];
+patch_Ta_y = [0; 0; -350; -350];
+patch(patch_Ta_x, patch_Ta_y,'b','FaceAlpha',0.2,'EdgeAlpha',0);
+
 
 %Patch per il disturbo in uscita
 patch_x_d = [omega_d_min; omega_d_max; omega_d_max; omega_d_min];
