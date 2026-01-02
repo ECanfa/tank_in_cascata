@@ -1,5 +1,3 @@
-close all; clear; clc;
-
 % Tank in Cascata Costanti di Workspace
 k1=1;
 k2=0.30;
