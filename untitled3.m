@@ -1,65 +1,7 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   Test del sistema linearizzato nel dominio del tempo
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+path_to_constants="tank_in_cascata_costanti.m";
+run(path_to_constants);
 
-close all; clear; clc;
-
-k1=1;
-k2=0.30;
-k3=0.45;
-k4=0.50;
-
-xe=[9.45, 4.20];
-ue=(k1/k4)*sqrt(xe(1));
-
-%Condizione iniziale temporanea (per provare con simulink)
-x0 = [xe(1), xe(2)];
-
-%Matrici del sistema linearizzato
-
-A=[-k1/(2*sqrt(xe(1))), 0; k2/(2*sqrt(xe(1))), -k3/(2*sqrt(xe(2)))];
-B=[k4; 0];
-C=[0, 1];
-D=0;
-
-modello = ss(A,B,C,D);
-
-%Definizione spazio degli stati
-G = tf(modello);
-
-%Testare sul sistema in anello chiuso
-R = 1;
-
-% (luci) 12/28 test con nuovo regolatore
-S_star = 30;
-T_a_5_star = 0.050;
-xi_star  = abs(log(S_star/100))/(sqrt(pi^2 + log(S_star/100)^2));
-M_f_min = 100*xi_star;
-    
-omega_c_min = -log(0.05)*100/(M_f_min*T_a_5_star);
-
-omega_c_star = omega_c_min;%+ (omega_c_max - omega_c_min)/4;
-mu_omega_c_star = 1/abs(evalfr(G,omega_c_star));
-mu_R = max(0, mu_omega_c_star/abs(evalfr(G, 0)));
-RR_s = mu_R;
-
-fprintf('guadagno omega c %f', mu_R);
-
-phi_star = pi/3;
-cos_phi_star = cos(phi_star);
-sin_phi_star = sin(phi_star);
-M_star = 1/(cos(phi_star))+0.01;
-
-T_zero_Rd = (M_star - cos_phi_star)/(omega_c_star*sin_phi_star);
-T_polo_Rd = (cos(phi_star) - 1/M_star)/(omega_c_star*sin_phi_star);
-
-s = tf('s');
-RR_d = 1*(1+T_zero_Rd*s)/(1+T_polo_Rd*s);
-
-RR = RR_s*RR_d;
-
-L = RR*G;
-F = L/(1+L);
+% Punto 4 nel dominio dei tempi
 
 % Risposta a w(t) riferimento
 W = 3.5;

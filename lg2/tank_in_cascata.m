@@ -1,4 +1,4 @@
-    close all; clear; clc;
+close all; clear; clc;
 %Definizioni costanti e punti di equilibrio
 
 k1=1;
@@ -80,8 +80,6 @@ patch_x_e = [omega_plot_min; omega_d_max; omega_d_max; omega_plot_min];
 val_p = 20*log(abs(evalfr(p, omega_d_max)));
 patch_y_e = [20*log(abs(evalfr(p, omega_plot_min))); val_p; val_p ; val_p];
 patch(patch_x_e, patch_y_e,'r','FaceAlpha',0.2,'EdgeAlpha',0);
-
-
 
 %Patch per il disturbo in uscita
 patch_x_d = [omega_d_min; omega_d_max; omega_d_max; omega_d_min];
