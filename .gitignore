@@ -1,3 +1,6 @@
 .venv
+.pdf
+# Matlab Cache Data
+slprj
+.slxc
 .asv
-*.pdf
