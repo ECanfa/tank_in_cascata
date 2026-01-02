@@ -1,3 +1,4 @@
+clear all; close all; clc;
 path_to_constants="tank_in_cascata_costanti.m";
 run(path_to_constants);
 
