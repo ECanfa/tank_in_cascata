@@ -57,6 +57,10 @@ mu_min_dist = 10^(A_d/20);
 G_0 = abs(evalfr(G,0));
 G_omega_d_MAX = abs(evalfr(G,j*omega_d_max));
 
+%Per rispettare le specifiche sul tempo di assestamento aumentiamo il
+%guadagno del regolatore statico.
+%Alternativamente si può agire su M_star della rete anticipatrice (vedere
+%dopo)
 omega_c_star = omega_c_min;
 mu_omega_c_star = 1/abs(evalfr(G,omega_c_star));
 
@@ -74,6 +78,8 @@ phi_star = pi/3;
 cos_phi_star = cos(phi_star);
 sin_phi_star = sin(phi_star);
 M_star = 1/(cos(phi_star))+0.1;
+%Approccio alternativo per rispettare la specifica sul tempo di
+%assestamento sarebbe stata quella di aumentare il valore di M_star 
 
 % controllo parametri scelti, formule di inversione
 if (M_star < 0) ...
