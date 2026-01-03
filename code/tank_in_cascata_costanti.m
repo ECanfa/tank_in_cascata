@@ -55,8 +55,13 @@ mu_err = (W_star+D_star)/e_star - 1; % per Teorema Valore Finale
 mu_min_dist = 10^(A_d/20);
 
 G_0 = abs(evalfr(G,0));
+G_omega_d_MAX = abs(evalfr(G,j*omega_d_max));
+
 omega_c_star = omega_c_min;
 mu_omega_c_star = 1/abs(evalfr(G,omega_c_star));
+
+
+mu_temp = max(mu_err/G_0, mu_min_dist/G_omega_d_MAX);
 
 mu_R = mu_omega_c_star/G_0;
 RR_s = mu_R;
