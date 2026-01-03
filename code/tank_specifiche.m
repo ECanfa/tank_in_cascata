@@ -58,8 +58,8 @@ patch(patch_fis_x,patch_fis_y,'r','FaceAlpha',0.2,'EdgeAlpha',0);
 [M_a, M_f, omega_pi, omega_c] = margin(L);
 
 %Diagramma di Bode della L(s) temporanea
-%margin(G_esteso,{omega_plot_min,omega_plot_max});
-%hold on;
+margin(G_esteso,{omega_plot_min,omega_plot_max});
+hold on;
 margin(L,{omega_plot_min,omega_plot_max});
 
 %Specifica sovraelongazione(Margine di fase)
