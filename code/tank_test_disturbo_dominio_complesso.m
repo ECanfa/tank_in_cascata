@@ -22,7 +22,9 @@ figure(2);
 omega_d_min = 1e-5; %approssimazione verso 0
 omega_d_max = 4.0;
 bode(YY,{omega_d_min, omega_d_max});
-title('Trasformata della risposta del sistema ad anello chiuso per un disturbo d(s)');
+hold on;
+bode(sin_transform,{omega_d_min, omega_d_max})
+title('Trasformata della risposta del sistema ad anello chiuso per un disturbo D(s)');
 
 % Check Disturbo di Misura
 % (luci)
@@ -40,4 +42,6 @@ omega_n_max = 5e6;
 
 figure(3);
 bode(YY,{omega_n_min, omega_n_max});
-title('Trasformata della risposta del sistema ad anello chiuso per un disturbo n(s)');
+hold on;
+bode(sin_transform,{omega_n_min, omega_n_max})
+title('Trasformata della risposta del sistema ad anello chiuso per un disturbo N(s)');
