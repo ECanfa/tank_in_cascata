@@ -71,7 +71,7 @@ legend(legend_step');
 
 w_max_step = 1; % range di valori randomizzati di prova [0, 2xe[
 r = rand([1,5]);
-w(1:length(r)) = 1 + (-w_max_step +  2*w_max_step*r);
+w(1:length(r)) = r*w_max_step;
 
 load_system("simulazione_sistema_non_lineare");
 mdl = "simulazione_sistema_non_lineare";
