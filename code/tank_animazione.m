@@ -6,7 +6,7 @@ run(path_to_constants);
 x0 = [0,0];
 
 %animazione sistema
-figure(1);
+% figure(1);
 %definizioni valori del grafico 
 axis([-10 10  0 50])
 %tempo simulazione
@@ -33,22 +33,31 @@ x_patch_tank = [-4 4 4 -4];
 y_patch_tank_a = [0 0 8 8];
 y_patch_tank_b = [12 12 30 30];
 
-
-grid on;
-hold on;
-for tt=1:1:length(t_s)
-    %aggiornamento grafico
-    figure(1);
-    clf;
+%aggiornamento grafico
+    % figure(1);
+    % clf;
 
     %definizione dei valori degli assi (x tra -10 e 10 e y 0 50)
     axis([-10 10  0 50]);
-    patch(x_patch_tank ,y_patch_tank_b,'y'); %tank 1
-    patch(x_patch_tank ,y_patch_tank_a,'y'); %tank 2
-    patch(x_patch_tank, [0,0, real(y(tt)), real(y(tt))] ,'b'); %livello dell'acqua tank 2
-    patch(x_patch_tank, [12,12, 12+real(x1(tt)), 12+real(x1(tt))] ,'b'); %livello dell'acqua tank 1
-    title('Risposta del sistema')
+ 
+ patch(x_patch_tank ,y_patch_tank_b,'y'); %tank 1
+ patch(x_patch_tank ,y_patch_tank_a,'y'); %tank 2
+       
+ tank_a_patch = patch(x_patch_tank, [0,0, 0, 0] ,'b'); %livello dell'acqua tank 2
+ tank_b_patch = patch(x_patch_tank, [12,12, 12, 12] ,'b'); %livello dell'acqua tank 1
+ title('Risposta del sistema')
+% 
+% grid on;
+% hold on;
+
+for tt=1:1:length(t_s)
+    tank_b_patch.Vertices(3:4,2) = +12+real(x1(tt));
+    tank_a_patch.Vertices(3:4,2) = real(y(tt));
+    %
+    %patch(x_patch_tank, [0,0, real(y(tt)), real(y(tt))] ,'b'); %livello dell'acqua tank 2
+    %patch(x_patch_tank, [12,12, 12+real(x1(tt)), 12+real(x1(tt))] ,'b'); %livello dell'acqua tank 1
     
+    drawnow;
     pause(0.0001);
     
 end
