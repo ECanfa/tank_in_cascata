@@ -1,10 +1,13 @@
 Progetto Tank in cascata
 
-Nel progetto è presente uno script chiamato tank_in_cascata_costanti.m dove vengono definite le costanti, la funzione di trasferimento e le funzioni di sensitività, usato per rendere il codice più leggibile.
+Nel progetto è presente uno script chiamato tank_in_cascata_costanti.m dove vengono definite le costanti, la funzione di trasferimento e le funzioni di sensitività, usato per rendere il codice più leggibile. Affinché gli script vengano eseguiti con successo è necessario che la directory di esecuzione dello script sia la stessa di "tank_in_cascata_costanti.m".
 
 Gli script da eseguire sono: 
-1. Per il punto 1 e il punto 2 guardare la parte del sistema in forma di stato, di linearizzazione e il calcolo della funzione di trasferimento sul file LATEX. Per la definizione delle matrici di linearizzazione e della funzione di trasferimento guardare lo script "tank_in_cascata_costanti.m".
-2. Per il punto 3 eseguire lo script ..., che presenta la costruzione delle patch realtive alle specifiche del progetto sul diagramma di bode della funzione di riferimento.
-3. Per il punto 4 eseguire lo script ... dove viene testato il sistema lineare con ingresso w(t) e disturbi n(t) e d(t).
-4. Per il punto 5 eseguire lo script ..., con realtivo file simulink ...
-5. Per il punto opzionale eseguire lo script ..., in cui viene mostrata un'animazione della dinamica del sistema.
+- tank_in_cascata_costanti, dove si trovano le costanti del progetto, la funzione di trasferimento, il progetto del regolatore e le funzioni di sensitività.
+- tank_in_cascata_specifiche, dove si mostra il diagramma di bode della funzione di anello con le patch relative alle specifiche del progetto
+- tank_test_disturbo_dominio_tempo, in cui abbiamo svolto il punto 4, ovvero la risposta del sistema linearizzato al riferimento w(t) e ai disturbi n(t) e d(t)
+- tank_test_disturbo_dominiio_complesso è una simulazione che abbiamo fatto per vedere l'andamento della risposta nel dominio frequenziale, nonché l'attenuazione dei disturbi (in quando le specifiche di attenuazione erano riportate in dB).
+-simulazione_sistema_non_lineare.slx in cui è presente lo schema a blocchi del sistema non lineare
+-simulazione_sistema_non_lineare_code, che contiene lo svolgimento dei punti 5.2 e 5.3
+-tank_animazione, che contiene l'animazione del sistema retroazionato con la matrice di stato in anello chiuso K opportunamente progettata
+-animazione_regolatore, che contiene l'animazione del sistema linearizzato in presenza del regolatore con relativo grafico dell'andamento nel tempo.
