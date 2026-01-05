@@ -3,12 +3,29 @@ close all; clear; clc;
 path_to_constants="tank_in_cascata_costanti.m";
 run("tank_in_cascata_costanti.m");
 
-% Disturbi
-% per il momento costanti, e assunto scalino
-D = 0;
+% Costanti e Parametri di Simulazione
 N = 0;
+Dist = 0;
 W = 1;
 U = [0 1];
+
+% Valori del disturbo
+D_F = zeros(1,4);
+D_A = 1.5;
+d_w = .4;
+
+for i=1:length(D_F)
+    D_F(i) = d_w*i;
+end
+
+N_F = zeros(1,4);
+N_A = 0.1;
+n_w = 2e5;
+
+for i=1:length(N_F)
+    N_F(i) = n_w*i;
+end
+
 %% 
 % Supponendo un riferimento w(t) = 1(t), esplorare il range di condizioni iniziali dello stato del sistema
 % non lineare (nell'intorno del punto di equilibrio) tali per cui l'uscita del sistema in anello chiuso converga
@@ -31,16 +48,18 @@ simIn(1:(length(r))) = Simulink.SimulationInput(mdl);
 
 for i = (length(r)):-1:1
     simIn(i) = setModelParameter(simIn(i),"Solver","ode45",...
-    "StopTime","20");
+    "StopTime","10");
     blk = strcat(mdl,"/Constant1");
     simIn(i) = setBlockParameter(simIn(i),blk,"Value","["+x1(1,i)+" "+x2(1,i)+ "]");
     if i== length(r)+1
       simIn(i) = setBlockParameter(simIn(i),blk,"Value","["+xe(1)+" "+xe(2)+ "]");
     end
+   
 end
 
 Simulink.sdi.clear;
 out = sim(simIn,"UseFastRestart","on");
+%out = parsim(simIn,"UseFastRestart","on","TransferBaseWorkspaceVariables", "on");
 runIDs = Simulink.sdi.getAllRunIDs;
 
 figure(1); hold on; grid on;
@@ -80,14 +99,14 @@ simIn(1:length(r)) = Simulink.SimulationInput(mdl);
 
 for i = length(r):-1:1
     simIn(i) = setModelParameter(simIn(i),"Solver","ode45",...
-    "StopTime","20");
+    "StopTime","10");
     blk = strcat(mdl,"/Rif");
     simIn(i) = setBlockParameter(simIn(i),blk,"After",""+w(i));
 end
 
-%out = parsim(simIn, TransferBaseWorkspaceVariables="on");
 Simulink.sdi.clear;
 out = sim(simIn,"UseFastRestart","on");
+%out = parsim(simIn,"UseFastRestart","on","TransferBaseWorkspaceVariables", "on");
 runIDs = Simulink.sdi.getAllRunIDs;
 
 figure(2); hold on; grid on;
