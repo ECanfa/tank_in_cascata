@@ -7,7 +7,8 @@ Gli script da eseguire sono:
 - tank_in_cascata_specifiche, dove si mostra il diagramma di bode della funzione di anello con le patch relative alle specifiche del progetto
 - tank_test_disturbo_dominio_tempo, in cui abbiamo svolto il punto 4, ovvero la risposta del sistema linearizzato al riferimento w(t) e ai disturbi n(t) e d(t)
 - tank_test_disturbo_dominiio_complesso è una simulazione che abbiamo fatto per vedere l'andamento della risposta nel dominio frequenziale, nonché l'attenuazione dei disturbi (in quando le specifiche di attenuazione erano riportate in dB).
+-simulazione_sistema_lineare, con relativo codice simulazione_sistema_lineare_code, in cui è presente lo schema a blocchi del sistema lineare con ingresso w(t) e i disturbi d(t) e n(t)
 -simulazione_sistema_non_lineare.slx in cui è presente lo schema a blocchi del sistema non lineare
--simulazione_sistema_non_lineare_code, che contiene lo svolgimento dei punti 5.2 e 5.3
+-simulazione_sistema_non_lineare_code, che contiene lo svolgimento dei punti 5.2 e 5.3. Per evitare simulazioni troppo lente si consiglia di rimuovere i disturbi in ingresso e di misurazione dallo schema a blocchi simulink.
 -tank_animazione, che contiene l'animazione del sistema retroazionato con la matrice di stato in anello chiuso K opportunamente progettata
 -animazione_regolatore, che contiene l'animazione del sistema linearizzato in presenza del regolatore con relativo grafico dell'andamento nel tempo.
