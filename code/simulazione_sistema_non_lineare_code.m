@@ -101,7 +101,7 @@ for i = length(r):-1:1
     simIn(i) = setModelParameter(simIn(i),"Solver","ode45",...
     "StopTime","10");
     blk = strcat(mdl,"/Rif");
-    simIn(i) = setBlockParameter(simIn(i),blk,"After",""+w(i));
+    simIn(i) = setBlockParameter(simIn(i),blk,"After",num2str(w(i)));
 end
 
 Simulink.sdi.clear;
