@@ -37,6 +37,9 @@ simIn = Simulink.SimulationInput(mdl);
 % simIn = setBlockParameter(simIn, blk, "Denominator", "["+ ...
 %     num2str(RR.Denominator{1}) + "]");
 
+simIn = setModelParameter(simIn(i),"Solver","ode45",...
+    "StopTime","20");
+
 blk = mdl+"/Disturbo_Gen";
 simIn = setBlockParameter(simIn, blk, "Frequency", "["+ ...
     num2str(D_F) + "]");
