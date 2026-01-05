@@ -11,7 +11,7 @@ U = [0 1];
 
 % Valori del disturbo
 D_F = zeros(1,4);
-D_A = 1.5;
+D_A(1:4) = 1.5;
 d_w = .4;
 
 for i=1:length(D_F)
@@ -19,7 +19,7 @@ for i=1:length(D_F)
 end
 
 N_F = zeros(1,4);
-N_A = 0.1;
+N_A(1:4) = 0.1;
 n_w = 2e5;
 
 for i=1:length(N_F)
@@ -49,6 +49,7 @@ simIn(1:(length(r))) = Simulink.SimulationInput(mdl);
 for i = (length(r)):-1:1
     simIn(i) = setModelParameter(simIn(i),"Solver","ode45",...
     "StopTime","10");
+     simIn(i) = setModelParameter(simIn(i),FixedStep="0.1");
     blk = strcat(mdl,"/Constant1");
     simIn(i) = setBlockParameter(simIn(i),blk,"Value","["+x1(1,i)+" "+x2(1,i)+ "]");
     if i== length(r)+1
@@ -58,7 +59,7 @@ for i = (length(r)):-1:1
 end
 
 Simulink.sdi.clear;
-out = sim(simIn,"UseFastRestart","on");
+out = sim(simIn);%,"UseFastRestart","on");
 %out = parsim(simIn,"UseFastRestart","on","TransferBaseWorkspaceVariables", "on");
 runIDs = Simulink.sdi.getAllRunIDs;
 
